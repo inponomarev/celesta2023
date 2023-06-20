@@ -1,0 +1,862 @@
+= Поробуйте, наконец, Celesta в своём проекте!
+Иван Пономарёв
+:revealjs_theme: black
+:revealjs_customtheme: white_course.css
+:revealjs_slideNumber:
+:revealjs_history:
+:revealjs_progress:
+:encoding: UTF-8
+:lang: ru
+include::_doc_general_attributes.adoc[]
+:doctype: article
+:toclevels: 3
+:imagesdir: images
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:icons: font
+:iconfont-remote!:
+:iconfont-name: font-awesome-4.7.0/css/font-awesome
+:revealjs_mouseWheel: true
+:revealjs_center: false
+:revealjs_transition: none
+:revealjs_width: 1600
+:revealjs_height: 900
+:stem: latexmath
+
+:!figure-caption:
+[%notitle]
+== Кто я такой
+
+[cols="30a,70a"]
+|===
+|image::ivan.jpg[]
+|
+
+Иван Пономарёв
+
+* Staff Engineer @ Synthesized.io
+* Teaching Java @ МФТИ and Mainor
+* PC Member @ Heisenbug, Hydra, FlowConference
+
+
+|===
+
+== На дворе 2003й год...
+
+Нам всё ещё нужно приложение на Java/Kotlin, работающее с реляционной базой
+
+== Connectivity
+
+JDBC API + DataSource
+
+image::hikari.png[]
+
+== RDBMS
+
+[cols="1a,1a,1a,1a,1a"]
+|===
+.^| image:Mssql.jpg[width="128px"]
+.^| image:Ora.jpg[width="128px"]
+.^| image:postgresql.svg[width="128px"]
+.^| image:db2.png[width="128px"]
+.^| image:mysql.png[width="150px"]
+.^| image:firebird.svg[width="128px"]
+.^| image:H2.png[width="150px"]
+.^| image:sqllite.svg[width="220px"]
+.^| image:derby.png[width="180px"]
+.^|
+|===
+
+== Мигратор
+
+[cols="1a,1a"]
+|===
+>.^|image:flyway.svg[width="200px"]
+<.^|image:liquibase.svg[width="400px"]
+|===
+
+
+== ORM
+
+[cols="1a,1a,1a"]
+|===
+.^|image:spring.png[]
+.^|image:jooq.png[]
+.^|image:hibernate.png[]
+|===
+
+== Тестирование
+
+[cols="1a,1a"]
+|===
+.^|image:testcontainers_transparent.png[]
+.^|image:H2.png[]
+|===
+
+[%notitle]
+== Standards
+
+image::standards_2x.png[]
+
+
+== Meet Celesta
+
+image::celesta_duke.png[{image-50-width}]
+
+* Ответ на сложность разработки и тестирования систем с базами данных
+* Миграции + Type-Safe code-generated ORM + testing
+
+
+== Что такое Celesta?
+
+[%step]
+* image:thumbs-up.png[] Free open source
+* image:thumbs-up.png[] Десятки малых и средних проектов. Стабильна!
+* image:inlove.png[] Вы только посмотрите на документацию: https://courseorchestra.github.io/celesta/en/index.html#CelestaSQL[courseorchestra.github.io/celesta]
+* image:thumbs-up.png[]  IDEA Plugin
+
+== Что такое Celesta
+
+https://github.com/CourseOrchestra/celesta/
+
+[%step]
+* image:shrug.png[]  Раньше поддерживалась компанией, сейчас почти проект одного человека
+* image:shrug.png[] Никак не выйдет за пределы узкого круга моих знакомых и коллег
+* image:shrug.png[] Мало звёзд на гитхабе -- подкиньте, пожалуйста image:star.svg[width=32]!
+
+== Celesta
+
+* Абстракция над 5 типами баз данных. Код не изменяется при замене базы данных!
+
+[graphviz]
+----
+digraph G {
+  graph [dpi = 200];
+  node[shape=rect,style=rounded];
+  {rank = same; A; B}
+  A[label="Client code"];
+  B[label="Celesta"]
+
+  C[label="PostgreSQL"];
+  D[label="Oracle"];
+  E[label="MSSQL"];
+  F[label="Firebird"];
+  G[label="H2"];
+  H[label="..."]
+
+  A -> B;
+  B -> C[arrowhead=none];
+  B -> D[arrowhead=none];
+  B -> E[arrowhead=none];
+  B -> F[arrowhead=none];
+  B -> G[arrowhead=none];
+  B -> H[arrowhead=none];
+}
+----
+== Comparison testing
+
+image::comparison-celesta.png[{image-60-width}]
+
+== Celesta
+
+image::celesta_sql.svg[]
+
+== FAQ: Как же мой супер-производительный запрос, использующий специфичную функциональность конкретной СУБД?
+
+[%step]
+1. А может обойтись функциональностью CelestaSQL?
+2. Всегда можно просверлить дырку в абстракции
+
+== Внезапная выгода от database agnostic подхода
+
+То, что работает на H2, будет работать и на
+
+* PostgreSQL
+* Oracle
+* MSSQL
+* Firebird
+
+== Проблемы с традиционными миграторами
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog>
+    <changeSet>
+        ....
+    </changeSet>
+    <changeSet>
+        ....
+    </changeSet>
+    <changeSet>
+        ....
+    </changeSet>
+</databaseChangeLog>
+----
+
+* Какова актуальная схема базы данных?
+
+== Это как если бы....
+
+[source, java]
+----
+class Employee {
+    ...
+}
+
+alter class Employee add variable String name;
+
+alter class Employee drop method promote();
+
+alter class add method doSomething(…) {
+…
+}
+----
+
+== Не лучше ли
+
+[source,sql]
+----
+CONVERGE TABLE OrderHeader(
+  id VARCHAR(30) NOT NULL,
+  date DATETIME DEFAULT GETDATE(),
+  customer_id VARCHAR(30),
+  customer_name VARCHAR(100),
+  CONSTRAINT Pk_OrderHeader PRIMARY KEY (id)
+);
+----
+
+* чтобы скрипт выглядел привычно для SQL редакторов, используем `CREATE` вместо `CONVERGE`
+
+== Как работает миграция Celesta
+
+1. Сравнение актуального и желательного
+2. Best effort для приведения актуального к желательному (топологическая сортировка, правильный порядок операций и т.д.)
+3. Если у схемы задана версия через
+
+[source,sql]
+----
+CREATE SCHEMA foo VERSION '1.0';
+----
+то миграция не производится к схеме более старой версии.
+
+== FAQ: Но ведь это работает не всегда?
+
+[%step]
+. На практике, вы нескоро встретите случай, когда idempotent DDL миграция не справится
+
+. Да, иногда миграцию нужно производить вручную. Если число окружений, на которых _нужно_ производить миграцию, не больше двух, у вас _нет проблемы_
+
+. Кейс: множество окружений. Celesta + Flyway. Можно отключить мигратор Celesta и использовать автоматический вместо него
+
+. Автоматические миграторы, кстати, тоже иногда не срабатывают на проде
+
+== Курсоры
+
+[plantuml, cursors, png]
+----
+@startuml
+skinparam dpi 180
+package "Library code" {
+BasicDataAccessor <|- Sequence
+BasicDataAccessor <|-l- BasicCursor
+BasicCursor       <|-- ParameterizedViewCursor
+BasicCursor       <|-- ViewCursor
+BasicCursor       <|-- MaterializedViewCursor
+BasicCursor       <|-- Cursor
+BasicCursor       <|-- ReadOnlyTableCursor
+}
+
+package "Generated code" {
+ParameterizedViewCursor <|-- GeneratedPV
+ViewCursor              <|-- GeneratedView
+MaterializedViewCursor  <|-- GeneratedMView
+Cursor                  <|-- Generated
+Sequence                <|-- GeneratedSeq
+}
+@enduml
+----
+
+== Как работает транзакция
+
+* `CallContext` -- короткоживущий объект, несущий информацию о связи с базой данных, текущей транзакции и всех ресурсах, задействованных в текущей транзакции
+
+[source,java]
+----
+@CelestaTransaction
+public OrderDTO postOrder(CallContext ctx, OrderDTO orderDTO) {
+    //каждому курсору нужен контекст
+    OrderCursor orderCursor = new OrderCursor(ctx);
+    //делаем что-то с базой
+    ....
+
+}
+----
+
+== В это время снаружи транзакции...
+
+[source,java]
+----
+try {
+    ctx.activate(celesta, ....);
+    Object result = joinPoint.proceed();
+    ctx.commit();
+    return result;
+} catch (Throwable e) {
+    ctx.rollback();
+    throw e;
+} finally {
+    ctx.close();
+}
+----
+
+== Как работает курсор: чтение по первичному ключу
+
+[source,java]
+----
+//Type safe API!
+item.get(42);
+----
+
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+
+			</tr>
+			<tr>
+				<td> </td><td> </td><td> </td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="select"]
+}
+----
+
+[source,sql]
+----
+select id, name, default_price from item where id = 42 limit 1;
+----
+
+== Как работает курсор: чтение по первичному ключу
+
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+
+			</tr>
+			<tr>
+				<td>42</td><td>cheese</td><td>12.5</td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="get(42)" style=invis]
+    DB->rec[style="dashed"]
+}
+----
+
+== Как работает курсор: модификация данных
+
+[source,java]
+----
+//Type-safe, camelCase API
+item.setDefaultPrice(14.9);
+----
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+
+			</tr>
+			<tr>
+				<td>42</td><td>cheese</td><td bgcolor='yellow'>14.9</td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="get(42)" style=invis]
+    DB->rec[style="dashed" style=invis]
+}
+----
+
+
+
+== Как работает курсор: модификация данных
+
+[source,java]
+----
+item.update();
+----
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+
+			</tr>
+			<tr>
+				<td bgcolor='grey'>42</td><td>cheese</td><td bgcolor='yellow'>14.9</td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="update"]
+}
+----
+
+[source,sql]
+----
+update item set default_price=14.9 where id = 42;
+----
+
+== Как работает курсор: удаление
+
+[source,java]
+----
+item.setId(43).delete();
+----
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+
+			</tr>
+			<tr>
+				<td bgcolor='grey'>43</td><td>cheese</td><td>14.9</td>
+			</tr>
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="delete"]
+}
+----
+
+[source,sql]
+----
+delete from item where id = 43;
+----
+
+== Как работает курсор: вставка с возвратом полей, вычисляемых базой данных
+
+[source,java]
+----
+item.setName("cheese").insert();
+----
+
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+                <td>timestamp</td>
+			</tr>
+			<tr>
+				<td> </td><td>cheese</td><td> </td>
+                <td> </td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="insert .. returning"]
+
+}
+----
+
+
+
+== Как работает курсор: вставка с возвратом полей, вычисляемых базой данных
+
+[source,java]
+----
+item.insert();
+----
+
+
+[graphviz]
+----
+digraph Java {
+    graph [ fontname="Sans"; dpi = 180 ];
+
+	rankdir="LR";
+	node[shape=plaintext]
+	rec[label=<
+		<table border='0' cellborder='1' cellspacing='0'>
+			<tr>
+				<td>id</td><td>name</td><td>default_price</td>
+                <td>timestamp</td>
+			</tr>
+			<tr>
+				<td bgcolor='yellow'>44</td><td>cheese</td><td bgcolor='yellow'>0</td>
+                <td bgcolor='yellow'>2023-06-27</td>
+			</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="insert .. returning", style=invis]
+    rec->DB[dir=back, style=dashed]
+}
+----
+
+
+== Как работает курсор: чтение фильтрованной выборки
+
+[source,java]
+----
+//Не происходит запроса к БД, просто конфигурируем курсор
+cursor.setRange(cursor.COLUMNS.foo(), value)
+
+//SELECT ... WHERE foo = value
+for (MyCursor rec: cursor) {
+    ....
+}
+
+
+----
+
+== Защита от потерянных обновлений
+
+[cols="1a,1a"]
+|===
+|
+[source,java]
+----
+rec.get(42);
+rec.setName("foo")
+   .update();
+----
+|
+[source,java]
+----
+rec.get(42);
+rec.setName("bar")
+   .update();
+----
+|===
+1. Каждая таблица содержит поле `recversion`
+2. Каждая таблица имеет UPDATE-триггер, проверяющий версию прочитанных данных и инкрементирующий `recversion`.
+3. Отключаемо при помощи `WITH NO VERSION CHECK`
+
+
+== "Проблема N+1"
+
+[source,java]
+----
+FooCursor foo = new FooCursor(context);
+BarCursor bar = new BarCursor(context);
+for (FooCursor c: foo) {
+  bar.get(c.getBarId());
+/* достаем данные в каждой итерации :-( */
+}
+----
+
+== "Проблема N+1": чуть лучше
+
+[source,java]
+----
+FooCursor foo = new FooCursor(context);
+BarCursor bar = new BarCursor(context);
+for (FooCursor c: foo){
+  /* Objects.equals защищает от NPE */
+  if (!Objects.equals(bar.getId(), c.getBarId()))
+  /* меньше обращений к базе */
+     bar.get(c.getBarId());
+}
+----
+
+== "Проблема N+1": минимально
+
+[source,java]
+----
+FooCursor foo = new FooCursor(context);
+BarCursor bar = new BarCursor(context);
+// Сортируем по join колонке
+foo.orderBy(foo.COLUMNS.barId());
+for (FooCursor c: foo) {
+  if (!Objects.equals(bar.getId(), c.getBarId()))
+  /* минимальное число обращений к базе */
+     bar.get(c.getBarId());
+}
+----
+
+== Проблемы N+1 может и не быть :-)
+
+[source,sql]
+----
+create view item_view as
+    select
+      i.id as id,
+      i.name as name,
+      o.ordered_quantity as ordered_quantity,
+      o.ordered_amount as ordered_amount
+    from item as i left join item_orders as o on i.id = o.item_id;
+----
+
+* `ItemViewCursor` содержит все нужные поля
+
+
+== Проблема чтения лишних полей
+
+[source,java]
+rec.get(42)
+
+[graphviz]
+----
+digraph Java {
+graph [ fontname="Sans"; dpi = 180 ];
+
+rankdir="LR";
+node[shape=plaintext]
+rec[label=<
+<table border='0' cellborder='1' cellspacing='0'>
+<tr>
+<td>id</td><td>f1</td><td>f2</td><td>f3</td><td>f4</td><td>f5</td><td>f6</td><td>f7</td><td>f8</td>
+</tr>
+<tr>
+<td>42</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="select id, f1...f8 from ..."]
+}
+----
+
+== Проблема чтения лишних полей
+
+[source,java]
+----
+RecCursor.Columns columns = new RecCursor.Columns(celesta);
+RecCursor rec = new RecCursor(context, columns.f1(), columns.f3());
+rec.get(42)
+----
+
+[graphviz]
+----
+digraph Java {
+graph [ fontname="Sans"; dpi = 180 ];
+
+rankdir="LR";
+node[shape=plaintext]
+rec[label=<
+<table border='0' cellborder='1' cellspacing='0'>
+<tr>
+<td>id</td><td>f1</td><td>f2</td><td>f3</td><td>f4</td><td>f5</td><td>f6</td><td>f7</td><td>f8</td>
+</tr>
+<tr>
+<td bgcolor='yellow'>42</td><td bgcolor='yellow'>v1</td><td></td><td bgcolor='yellow'>v3</td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+		</table>
+	>];
+
+	DB[shape="cylinder"]
+
+	rec->DB[label="select id, f1, f3 from ..."]
+}
+----
+
+== Пример: схема данных
+
+[plantuml, dataschema, png]
+----
+@startuml
+skinparam dpi 180
+hide circle
+class customer {
+ -id
+---
+ -name
+ -email
+ -description
+
+}
+class order {
+ -id
+---
+ -customer_id
+ -item_id
+ -quantity
+ -price
+ -amount
+}
+class item {
+ -id
+---
+ -name
+ -default_price
+}
+order -->  customer : customer_id
+order --> item : item_id
+@enduml
+----
+
+== Пример: Архитектура
+
+
+[graphviz]
+----
+digraph G {
+graph [ fontname="Sans"; dpi = 180 ];
+compound=true;
+node [fontname = "Sans"];
+rankdir="LR";
+node [shape="box"];
+Database[shape="cylinder"];
+API[shape="none";label="RESTful\nAPI"]
+
+API -> Interface[lhead=cluster_Controller];
+
+subgraph cluster_BE {
+    label="Backend";
+    Interface -> Service[ltail=cluster_Controller];
+
+   subgraph cluster_Controller {
+       label="Controller"
+       Interface[shape=note]
+       DTO2[shape=note]
+   }
+   Service -> Cursor1[lhead=cluster_DAO];
+   subgraph cluster_DAO {
+      label="DAO"
+        Cursor1[shape=note]
+        Cursor2[shape=note]
+  }
+  subgraph cluster_Controller {
+  }
+}
+
+
+Cursor1->Database[ltail=cluster_DAO];
+
+DTO2 -> Cursor2[style=invis,dir=both,label=Mapping]
+
+}
+----
+
+== Пример: Архитектура
+
+
+[graphviz]
+----
+digraph G {
+graph [ fontname="Sans"; dpi = 180 ];
+compound=true;
+node [fontname = "Sans"];
+rankdir="LR";
+node [shape="box"];
+Database[shape="cylinder"];
+API[shape="none";label="RESTful\nAPI"]
+
+API -> Interface[lhead=cluster_Controller];
+
+subgraph cluster_BE {
+    label="Backend";
+    Interface -> Service[ltail=cluster_Controller];
+
+   subgraph cluster_Controller {
+       label="Controller"
+       Interface[shape=note]
+       DTO2[shape=note]
+   }
+   Service -> Cursor1[lhead=cluster_DAO];
+   subgraph cluster_DAO {
+      label="DAO"
+        Cursor1[shape=note]
+        Cursor2[shape=note]
+  }
+  subgraph cluster_Controller {
+  }
+}
+
+
+Cursor1->Database[ltail=cluster_DAO];
+
+DTO2 -> Cursor2[style=dashed,dir=both,label=Mapping]
+
+}
+----
+
+
+== Спасибо за внимание!
+
+https://github.com/CourseOrchestra/celesta/
+
+* Поставьте звезду
+* Помогите советом
+* Попробуйте уже, наконец!
+
+icon:envelope[size=lg] ivan@synthesized.io
+
+icon:twitter[size=lg] @inponomarev
