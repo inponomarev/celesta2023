@@ -26,6 +26,7 @@
     <spring.boot.starter.celesta.version>2.1.68</spring.boot.starter.celesta.version>
     <hurdy.gurdy.version>1.29</hurdy.gurdy.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+    <retrofit.version>2.9.0</retrofit.version>
   </properties>
 
   <parent>
@@ -38,10 +39,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -115,9 +112,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.javafaker</groupId>
-      <artifactId>javafaker</artifactId>
-      <version>1.0.2</version>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>retrofit</artifactId>
+      <version>${retrofit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>converter-jackson</artifactId>
+      <version>${retrofit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>converter-scalars</artifactId>
+      <version>${retrofit.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -158,6 +167,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven.surefire.plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/IT*</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>

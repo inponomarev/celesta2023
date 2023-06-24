@@ -57,6 +57,8 @@ class DocumentServiceTest {
         Assertions.assertThat(orderCursor.getPrice()).isEqualTo(item.getDefaultPrice());
         Assertions.assertThat(orderCursor.getQuantity()).isEqualTo(100);
         Assertions.assertThat(orderCursor.getAmount()).isEqualTo(item.getDefaultPrice() * orderCursor.getQuantity());
+
+        //"LAZY" ASSERT
         JsonApprovals.verifyJson(new ObjectMapper().writer().writeValueAsString(result));
     }
 

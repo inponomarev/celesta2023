@@ -18,7 +18,6 @@ public class OrderService {
     @CelestaTransaction
     public OrderDTO postOrder(CallContext ctx, OrderDTO orderDTO) {
         OrderCursor orderCursor = new OrderCursor(ctx);
-
         CursorMapper.INSTANCE.map(orderDTO, orderCursor);
         ItemCursor item = new ItemCursor(ctx);
         item.get(orderDTO.getItemId());

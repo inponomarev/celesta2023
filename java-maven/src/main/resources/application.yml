@@ -1,0 +1,8 @@
+celesta:
+  #jdbc:
+  #  url: jdbc:postgresql://localhost:5432/celesta2023
+  #  username: postgres
+  #  password: 123
+  h2:
+    inMemory: true
+    referentialIntegrity: true

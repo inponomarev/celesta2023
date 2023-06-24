@@ -14,6 +14,7 @@ create index customer_idx on customer(name);
 create table item (
     id varchar(12) not null primary key,
     name varchar(100) not null,
+    color varchar(20),
     default_price int
 );
 
