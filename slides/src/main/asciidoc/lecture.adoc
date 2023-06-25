@@ -1,4 +1,4 @@
-= Попробуйте, наконец, Celesta в своём проекте!
+= Попробуйте, наконец, Celesta +++<br/>+++ в своём проекте!
 Иван Пономарёв
 :revealjs_theme: black
 :revealjs_customtheme: white_course.css
@@ -24,6 +24,18 @@ include::_doc_general_attributes.adoc[]
 :stem: latexmath
 
 :!figure-caption:
+[%notitle]
+== Эпиграф
+[cols="70a,30a"]
+|===
+|
+[quote, attributed to Albert Einstein]
+Everything should be made as simple as possible, but not simpler
+|
+image::einstein.jpg[]
+|===
+
+
 [%notitle]
 == Кто я такой
 
