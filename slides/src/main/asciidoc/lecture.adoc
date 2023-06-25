@@ -53,6 +53,8 @@ JDBC API + DataSource
 
 image::hikari.png[]
 
+image::commonspool.png[]
+
 == RDBMS
 
 [cols="1a,1a,1a"]
@@ -80,13 +82,15 @@ image::hikari.png[]
 
 == ORM
 
-[cols="1a,1a,1a,1a"]
+[cols="1a,1a,1a,1a,1a"]
 |===
 >.^|image:spring.png[]
 ^.^|image:jooq.png[]
 <.^|image:hibernate.png[]
 <.^|image:mybatis.jpg[]
+<.^|image:eclipselink.png[]
 |===
+
 
 == Тестирование
 
@@ -103,12 +107,14 @@ image::standards_2x.png[]
 
 
 == Meet Celesta
-
+https://github.com/CourseOrchestra/celesta/
 [cols="2a,3a"]
 |===
 |image::celesta_duke.png[]
 |
+[%step]
 * Ответ на сложность разработки и тестирования систем с базами данных
+* Вдохновлен ERP-платформами
 * Миграции + Type-Safe code-generated ORM + testing
 |===
 
@@ -119,7 +125,7 @@ https://github.com/CourseOrchestra/celesta/
 [%step]
 * image:thumbs-up.png[] Free open source
 * image:thumbs-up.png[] Десятки малых и средних проектов. Стабильна!
-* image:inlove.png[] Вы только посмотрите на документацию: https://courseorchestra.github.io/celesta/en/index.html#CelestaSQL[courseorchestra.github.io/celesta]
+* image:inlove.png[] В документацию вложено много любви: https://courseorchestra.github.io/celesta/en/index.html#CelestaSQL[courseorchestra.github.io/celesta]
 * image:thumbs-up.png[]  IDEA Plugin
 
 == Проблемы проекта Celesta
@@ -129,7 +135,7 @@ https://github.com/CourseOrchestra/celesta/
 [%step]
 * image:shrug.png[]  Раньше поддерживалась компанией, сейчас почти проект одного человека
 * image:shrug.png[] Никак не выйдет за пределы узкого круга моих знакомых и коллег
-* image:shrug.png[] Мало звёзд на гитхабе -- подкиньте, пожалуйста image:star.svg[width=32]!
+* image:shrug.png[] Мало звёзд на гитхабе (если захотите, это легко исправить)!
 
 == Celesta
 
@@ -176,7 +182,7 @@ image::types.png[{image-80-width}]
 
 [%step]
 1. А может обойтись функциональностью CelestaSQL?
-2. Всегда можно просверлить дырку в абстракции
+2. Всегда можно просверлить дырку в абстракции (заплатив цену)
 
 == Внезапная выгода от database agnostic подхода
 
@@ -205,7 +211,7 @@ image::types.png[{image-80-width}]
 </databaseChangeLog>
 ----
 
-* Какова актуальная схема базы данных?
+* Какова актуальная схема базы данных? -- без дополнительных решений не разберёшься!
 
 == Это как если бы....
 
@@ -254,13 +260,11 @@ CREATE SCHEMA foo VERSION '1.0';
 == FAQ: Но ведь это работает не всегда?
 
 [%step]
-. На практике, вы нескоро встретите случай, когда idempotent DDL миграция не справится
+. Да, в аспекте _исключительно_ автомиграции дела обстоят несколько хуже
 
-. Да, иногда миграцию нужно производить вручную. Если число окружений, на которых _нужно_ производить миграцию, не больше двух, у вас _нет проблемы_
+. На практике, при адекватном подходе, вы не этого не почувствуете (готов обсудить отдельно)
 
-. Кейс: множество окружений. Celesta + Flyway. Можно отключить мигратор Celesta и использовать автоматический вместо него
-
-. Автоматические миграторы, кстати, тоже иногда не срабатывают на проде
+. Всегда можно обойти абстракцию и приспособить  Flyway (заплатив цену)
 
 == Курсоры
 
@@ -952,7 +956,7 @@ DTO2 -> Cursor2[style=dashed,dir=both,label=Mapping]
 
 https://github.com/CourseOrchestra/celesta/
 
-* Поставьте звезду
+* Понравилось? Поставьте звезду!
 * Помогите советом
 * Попробуйте уже, наконец!
 
