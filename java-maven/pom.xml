@@ -235,6 +235,59 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <layers>
+            <enabled>true</enabled>
+          </layers>
+          <finalName>application</finalName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>start-spring-boot</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                <INITDEMODATA>true</INITDEMODATA>
+              </environmentVariables>
+              <wait>1000</wait>
+              <skip>${skipTests}</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stop-spring-boot</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <skip>${skipTests}</skip>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Runs the integration tests (*IT) after the server is started -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <trimStackTrace>false</trimStackTrace>
+          <enableAssertions>true</enableAssertions>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
