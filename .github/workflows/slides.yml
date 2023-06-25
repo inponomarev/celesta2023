@@ -17,9 +17,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
-          cache: 'maven      
+          cache: 'maven'
       - name: Set up dot
-        run: sudo apt-get install -y graphvi
+        run: sudo apt-get install -y graphviz
       - name: Build with Maven
         run: mvn clean verify
         working-directory: slides
