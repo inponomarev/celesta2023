@@ -20,8 +20,8 @@ public class OrderService {
         OrderCursor orderCursor = new OrderCursor(ctx);
         CursorMapper.INSTANCE.map(orderDTO, orderCursor);
         ItemCursor item = new ItemCursor(ctx);
-        item.get(orderDTO.getItemId());
         if (orderCursor.getPrice() == null) {
+            item.get(orderDTO.getItemId());
             orderCursor.setPrice(item.getDefaultPrice());
         }
         orderCursor.setAmount(orderCursor.getPrice()
