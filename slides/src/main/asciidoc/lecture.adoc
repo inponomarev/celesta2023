@@ -125,29 +125,38 @@ https://github.com/CourseOrchestra/celesta/
 |image::celesta_duke.png[]
 |
 [%step]
-* Ответ на сложность разработки и тестирования систем с базами данных
+* Мигратор + Type-Safe code-generated ORM + testing helper
 * Вдохновлен ERP-платформами
-* Миграции + Type-Safe code-generated ORM + testing
+* Ответ на сложность разработки и тестирования систем с базами данных
 |===
 
 == Что такое Celesta?
 
 https://github.com/CourseOrchestra/celesta/
 
+[cols="2a,3a"]
+|===
+|image::celesta_duke.png[]
+|
 [%step]
 * image:thumbs-up.png[] Free open source
 * image:thumbs-up.png[] Десятки малых и средних проектов. Стабильна!
 * image:inlove.png[] В документацию вложено много любви: https://courseorchestra.github.io/celesta/en/index.html#CelestaSQL[courseorchestra.github.io/celesta]
 * image:thumbs-up.png[]  IDEA Plugin
-
+|===
 == Проблемы проекта Celesta
 
 https://github.com/CourseOrchestra/celesta/
 
+[cols="2a,3a"]
+|===
+|image::celesta_duke.png[]
+|
 [%step]
 * image:shrug.png[]  Раньше поддерживалась компанией, сейчас почти проект одного человека
 * image:shrug.png[] Никак не выйдет за пределы узкого круга моих знакомых и коллег
 * image:shrug.png[] Мало звёзд на гитхабе (если захотите, это легко исправить)!
+|===
 
 == Celesta
 
@@ -963,6 +972,11 @@ DTO2 -> Cursor2[style=dashed,dir=both,label=Mapping]
 }
 ----
 
+== Выводы
+
+* Database-first разработка
+* Фокус только на бизнес-логику и её тестирование
+* Быстрые и простые тесты, как Unit, так и E2E
 
 == Спасибо за внимание!
 
