@@ -142,8 +142,14 @@ https://github.com/CourseOrchestra/celesta/
 * image:thumbs-up.png[] Free open source
 * image:thumbs-up.png[] Десятки малых и средних проектов. Стабильна!
 * image:inlove.png[] В документацию вложено много любви: https://courseorchestra.github.io/celesta/en/index.html#CelestaSQL[courseorchestra.github.io/celesta]
-* image:thumbs-up.png[]  IDEA Plugin
+* image:thumbs-up.png[] Tooling:
+** Spring Boot Starter
+** JUnit 5 extension
+** Maven plugin (usable from Gradle)
+** IntelliJ IDEA plugin
 |===
+
+
 == Проблемы проекта Celesta
 
 https://github.com/CourseOrchestra/celesta/
