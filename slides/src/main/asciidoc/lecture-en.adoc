@@ -50,7 +50,7 @@ Ivan Ponomarev
 
 |===
 
-== The year is 2023...
+== The year is 2025...
 
 We still need a Java/Kotlin application working with a relational database.
 

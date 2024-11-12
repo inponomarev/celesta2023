@@ -8,7 +8,7 @@ The repository is organized as follows:
 
 - `java-maven`: This folder contains the Java project implemented using the Maven build system. It demonstrates how to integrate Celesta into a Java application and showcases various features and functionalities.
 
-- `slides`: This folder contains the [presentation slides](https://inponomarev.github.io/celesta2023) used to introduce and explain the Celesta framework. The slides provide an overview of Celesta's key features, architecture, and usage guidelines.
+- `slides`: This folder contains the presentation slides [EN](https://inponomarev.github.io/celesta2023/index-en.html#/) / [RU](https://inponomarev.github.io/celesta2023/) used to introduce and explain the Celesta framework. The slides provide an overview of Celesta's key features, architecture, and usage guidelines.
 
 ## License
 
