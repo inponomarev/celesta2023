@@ -22,7 +22,7 @@ include::_doc_general_attributes.adoc[]
 :revealjs_width: 1600
 :revealjs_height: 900
 :stem: latexmath
-
+:sectnums!:
 :!figure-caption:
 [%notitle]
 == Эпиграф
